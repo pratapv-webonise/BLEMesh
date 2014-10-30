@@ -7,9 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "AFNetworking.h"
 
-@interface ViewController : UIViewController
-
-
+@interface ViewController : UIViewController<UISearchControllerDelegate,UISearchDisplayDelegate>{
+    AFHTTPRequestOperationManager *manager;
+    BOOL isSearching;
+}
+@property(nonatomic,strong) NSMutableArray *searchResultsArray;
+@property(nonatomic,strong) IBOutlet UITableView *tableView;
 @end
 
