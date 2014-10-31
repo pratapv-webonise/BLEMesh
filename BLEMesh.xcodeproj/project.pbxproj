@@ -33,6 +33,9 @@
 		218B79B81A02002700ECF5F4 /* UIWebView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 218B79A71A02002700ECF5F4 /* UIWebView+AFNetworking.m */; };
 		218B79BC1A02032700ECF5F4 /* YouTubeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 218B79BA1A02032700ECF5F4 /* YouTubeCell.m */; };
 		218B79BD1A02032700ECF5F4 /* YouTubeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 218B79BB1A02032700ECF5F4 /* YouTubeCell.xib */; };
+		218B79C11A020AD700ECF5F4 /* CreateMeshViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 218B79C01A020AD700ECF5F4 /* CreateMeshViewController.m */; };
+		218B79C51A0216AD00ECF5F4 /* JoinMeshViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 218B79C41A0216AD00ECF5F4 /* JoinMeshViewController.m */; };
+		21AEEE3C1A027A2800E3E7B5 /* CBUUID+String.m in Sources */ = {isa = PBXBuildFile; fileRef = 21AEEE3B1A027A2800E3E7B5 /* CBUUID+String.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -98,6 +101,12 @@
 		218B79B91A02032700ECF5F4 /* YouTubeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YouTubeCell.h; sourceTree = "<group>"; };
 		218B79BA1A02032700ECF5F4 /* YouTubeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YouTubeCell.m; sourceTree = "<group>"; };
 		218B79BB1A02032700ECF5F4 /* YouTubeCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = YouTubeCell.xib; sourceTree = "<group>"; };
+		218B79BF1A020AD700ECF5F4 /* CreateMeshViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CreateMeshViewController.h; sourceTree = "<group>"; };
+		218B79C01A020AD700ECF5F4 /* CreateMeshViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CreateMeshViewController.m; sourceTree = "<group>"; };
+		218B79C31A0216AD00ECF5F4 /* JoinMeshViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JoinMeshViewController.h; sourceTree = "<group>"; };
+		218B79C41A0216AD00ECF5F4 /* JoinMeshViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JoinMeshViewController.m; sourceTree = "<group>"; };
+		21AEEE3A1A027A2800E3E7B5 /* CBUUID+String.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CBUUID+String.h"; sourceTree = "<group>"; };
+		21AEEE3B1A027A2800E3E7B5 /* CBUUID+String.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CBUUID+String.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -147,6 +156,8 @@
 				218B79BA1A02032700ECF5F4 /* YouTubeCell.m */,
 				218B79BB1A02032700ECF5F4 /* YouTubeCell.xib */,
 				218B79661A01FCA000ECF5F4 /* Main.storyboard */,
+				218B79BE1A020AA600ECF5F4 /* CreateMesh */,
+				218B79C21A02169600ECF5F4 /* JoinMesh */,
 				218B79691A01FCA000ECF5F4 /* Images.xcassets */,
 				218B796B1A01FCA000ECF5F4 /* LaunchScreen.xib */,
 				218B795C1A01FCA000ECF5F4 /* Supporting Files */,
@@ -230,6 +241,26 @@
 				218B79A71A02002700ECF5F4 /* UIWebView+AFNetworking.m */,
 			);
 			path = "UIKit+AFNetworking";
+			sourceTree = "<group>";
+		};
+		218B79BE1A020AA600ECF5F4 /* CreateMesh */ = {
+			isa = PBXGroup;
+			children = (
+				218B79BF1A020AD700ECF5F4 /* CreateMeshViewController.h */,
+				218B79C01A020AD700ECF5F4 /* CreateMeshViewController.m */,
+				21AEEE3A1A027A2800E3E7B5 /* CBUUID+String.h */,
+				21AEEE3B1A027A2800E3E7B5 /* CBUUID+String.m */,
+			);
+			name = CreateMesh;
+			sourceTree = "<group>";
+		};
+		218B79C21A02169600ECF5F4 /* JoinMesh */ = {
+			isa = PBXGroup;
+			children = (
+				218B79C31A0216AD00ECF5F4 /* JoinMeshViewController.h */,
+				218B79C41A0216AD00ECF5F4 /* JoinMeshViewController.m */,
+			);
+			name = JoinMesh;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -336,6 +367,7 @@
 				218B79A81A02002700ECF5F4 /* AFHTTPRequestOperation.m in Sources */,
 				218B79B51A02002700ECF5F4 /* UIImageView+AFNetworking.m in Sources */,
 				218B79651A01FCA000ECF5F4 /* ViewController.m in Sources */,
+				218B79C11A020AD700ECF5F4 /* CreateMeshViewController.m in Sources */,
 				218B79A91A02002700ECF5F4 /* AFHTTPRequestOperationManager.m in Sources */,
 				218B79B61A02002700ECF5F4 /* UIProgressView+AFNetworking.m in Sources */,
 				218B79AB1A02002700ECF5F4 /* AFNetworkReachabilityManager.m in Sources */,
@@ -344,9 +376,11 @@
 				218B79B41A02002700ECF5F4 /* UIButton+AFNetworking.m in Sources */,
 				218B79B21A02002700ECF5F4 /* UIActivityIndicatorView+AFNetworking.m in Sources */,
 				218B79AC1A02002700ECF5F4 /* AFSecurityPolicy.m in Sources */,
+				218B79C51A0216AD00ECF5F4 /* JoinMeshViewController.m in Sources */,
 				218B79B71A02002700ECF5F4 /* UIRefreshControl+AFNetworking.m in Sources */,
 				218B79B81A02002700ECF5F4 /* UIWebView+AFNetworking.m in Sources */,
 				218B79AA1A02002700ECF5F4 /* AFHTTPSessionManager.m in Sources */,
+				21AEEE3C1A027A2800E3E7B5 /* CBUUID+String.m in Sources */,
 				218B79B31A02002700ECF5F4 /* UIAlertView+AFNetworking.m in Sources */,
 				218B79AE1A02002700ECF5F4 /* AFURLRequestSerialization.m in Sources */,
 				218B79B11A02002700ECF5F4 /* AFNetworkActivityIndicatorManager.m in Sources */,
@@ -475,9 +509,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Scott Hallenbeck (NQ9H979XLW)";
 				INFOPLIST_FILE = BLEMesh/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "76035E75-4962-4B2B-B78F-32AD697BC4B5";
 			};
 			name = Debug;
 		};
@@ -485,9 +522,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Scott Hallenbeck (NQ9H979XLW)";
 				INFOPLIST_FILE = BLEMesh/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "76035E75-4962-4B2B-B78F-32AD697BC4B5";
 			};
 			name = Release;
 		};
@@ -544,6 +584,7 @@
 				218B797E1A01FCA000ECF5F4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		218B797F1A01FCA000ECF5F4 /* Build configuration list for PBXNativeTarget "BLEMeshTests" */ = {
 			isa = XCConfigurationList;
@@ -552,6 +593,7 @@
 				218B79811A01FCA000ECF5F4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -15,5 +15,8 @@
 }
 @property(nonatomic,strong) NSMutableArray *searchResultsArray;
 @property(nonatomic,strong) IBOutlet UITableView *tableView;
+@property(nonatomic,strong) IBOutlet UIButton *joinMeshBtn;
+
+-(IBAction)joinMesh:(id)sender;
 @end
 
