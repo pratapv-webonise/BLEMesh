@@ -67,13 +67,18 @@
         _discoveredPeripheral_1 = peripheral;
         [_centralManager connectPeripheral:peripheral options:nil];
         //1 device
-         [central stopScan];
+        
+        [_detectedDevices addObject:peripheral];
+        [_tableView reloadData];
+        [central stopScan];
     }
     else if(_discoveredPeripheral_2 == nil && peripheral!= _discoveredPeripheral_1) {
          NSLog(@"Periferal 2 found..");
         _discoveredPeripheral_2 = peripheral;
         [_centralManager connectPeripheral:peripheral options:nil];
+         [_detectedDevices addObject:peripheral];
         [central stopScan];
+        [_tableView reloadData];
     }
 }
 
@@ -88,10 +93,8 @@
 }
 
 -(void)centralManager:(CBCentralManager *)central didConnectPeripheral:(CBPeripheral *)peripheral{
-    peripheral.delegate = self;
     [peripheral discoverServices:@[[CBUUID UUIDWithString:TRANSFER_SERVICE_UUID]]];
     NSLog(@"Discovered services %@",peripheral.services);
-    
     
 }
 
@@ -143,46 +146,12 @@
         NSLog(@"Error %@",[error debugDescription]);
         return;
     }
+  
+    //Recive Final list of devices...
     
-    if(_discoveredPeripheral_1==peripheral){
-        NSLog(@"Recived Data from s1 ---> %@",characteristic.value);
-    }
-    else{
-        NSLog(@"Recived Data from s2 ---> %@",characteristic.value);
-    }
-    
-    NSString *levl= @"Level 0";
-    NSData* data = [levl dataUsingEncoding:NSUTF8StringEncoding];
-    [peripheral writeValue:data forCharacteristic:characteristic type:CBCharacteristicWriteWithResponse];
     
 }
 
--(void)sendDatatoPeripheral
-{
-    NSString *levl= @"Level 0";
-    NSData* data = [levl dataUsingEncoding:NSUTF8StringEncoding];
-    
-    for(CBService *service in _discoveredPeripheral_1.services)
-    {
-        if([[service.UUID representativeString] isEqual:TRANSFER_SERVICE_UUID])
-        {
-            NSLog(@"transfer service got passed");
-            
-            for(CBCharacteristic *charac in service.characteristics)
-            {
-                
-                if([[charac.UUID representativeString] isEqual:TRANSFER_CHARACTERISTIC_UUID])
-                {
-                    NSLog(@"char passed");
-                    
-                    [_discoveredPeripheral_1 writeValue:data forCharacteristic:charac type:CBCharacteristicWriteWithResponse];
-        
-                }
-            }
-        }
-    }
-    
-}
 
 - (void)peripheral:(CBPeripheral *)peripheral didWriteValueForCharacteristic:(CBCharacteristic *)characteristic
 {
@@ -194,18 +163,19 @@
 #pragma arguments
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return 10;// _detectedDevices.count;
+    return _detectedDevices.count;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"MyIdentifier"];
+        cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
-    cell.textLabel.text = @"test";
-    cell.detailTextLabel.text = @"detailedf test";
+    
+    CBPeripheral *p = _detectedDevices[indexPath.row];
+    cell.textLabel.text = p.name;
     return cell;
 }
 

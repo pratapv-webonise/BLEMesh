@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		217E9E541A03560800E3092D /* Notes.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 217E9E531A03560800E3092D /* Notes.rtf */; };
 		218B795F1A01FCA000ECF5F4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 218B795E1A01FCA000ECF5F4 /* main.m */; };
 		218B79621A01FCA000ECF5F4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 218B79611A01FCA000ECF5F4 /* AppDelegate.m */; };
 		218B79651A01FCA000ECF5F4 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 218B79641A01FCA000ECF5F4 /* ViewController.m */; };
@@ -49,6 +50,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		217E9E531A03560800E3092D /* Notes.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = Notes.rtf; sourceTree = "<group>"; };
 		218B79591A01FCA000ECF5F4 /* BLEMesh.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BLEMesh.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		218B795D1A01FCA000ECF5F4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		218B795E1A01FCA000ECF5F4 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -172,6 +174,7 @@
 				218B79961A02002700ECF5F4 /* UIKit+AFNetworking */,
 				218B795D1A01FCA000ECF5F4 /* Info.plist */,
 				218B795E1A01FCA000ECF5F4 /* main.m */,
+				217E9E531A03560800E3092D /* Notes.rtf */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -347,6 +350,7 @@
 				218B79BD1A02032700ECF5F4 /* YouTubeCell.xib in Resources */,
 				218B796D1A01FCA000ECF5F4 /* LaunchScreen.xib in Resources */,
 				218B796A1A01FCA000ECF5F4 /* Images.xcassets in Resources */,
+				217E9E541A03560800E3092D /* Notes.rtf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

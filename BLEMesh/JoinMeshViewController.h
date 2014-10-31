@@ -20,4 +20,13 @@
 @property (nonatomic,strong) IBOutlet UILabel *s1StatusLabel;
 @property (nonatomic,strong) IBOutlet UILabel *s2StatusLabel;
 
+
+@property(nonatomic,strong) NSMutableArray *connecteDevicesArray;
+
+//central
+@property (strong,nonatomic) CBCentralManager *centralManager;
+@property (nonatomic,strong) CBPeripheral *discoveredPeripheral_1;
+@property (nonatomic,strong) CBPeripheral *discoveredPeripheral_2;
+@property (strong,nonatomic) NSMutableData *data;
+
 @end

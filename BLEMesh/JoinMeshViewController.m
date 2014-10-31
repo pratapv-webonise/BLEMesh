@@ -60,9 +60,7 @@
 
 - (void)peripheralManager:(CBPeripheralManager *)peripheral central:(CBCentral *)central didSubscribeToCharacteristic:(CBCharacteristic *)characteristic {
     NSLog(@"Connected to master..%@ %@",central,characteristic.value);
-    
-    NSLog(@"value peripheral --> %@",characteristic);
-    
+
     self.masterConnectionLabel.text = @"Connected to master";
     //Now start scanning and finding new two devices
     
@@ -98,6 +96,35 @@
     NSLog(@"%@",myString);
     
 }
+
+
+//-------------------------------------------------------------------------------------------------/
+
+-(void)startSlaveCentral{
+    dispatch_queue_t centralQueue = dispatch_queue_create("mycentralqueue", DISPATCH_QUEUE_SERIAL);
+    _centralManager = [[CBCentralManager alloc]initWithDelegate:self queue:centralQueue];
+}
+
+-(void)startCentral{
+    //start central
+    dispatch_queue_t centralQueue = dispatch_queue_create("mycentralqueue", DISPATCH_QUEUE_SERIAL);
+    _centralManager = [[CBCentralManager alloc]initWithDelegate:self queue:centralQueue];
+}
+
+-(void)centralManagerDidUpdateState:(CBCentralManager *)central{
+    if(central.state!=CBCentralManagerStatePoweredOn){
+        NSLog(@"Bluetooth service is off...");
+        return;
+    }
+    else
+        if(central.state ==CBCentralManagerStatePoweredOn){
+            NSLog(@"Bluetooth service is working...");
+            NSLog(@"Scanning for devices.....");
+            [_centralManager scanForPeripheralsWithServices:@[[CBUUID UUIDWithString:TRANSFER_SERVICE_UUID]] options:@{ CBCentralManagerScanOptionAllowDuplicatesKey : @YES }];
+        }
+}
+
+
 
 
 @end
