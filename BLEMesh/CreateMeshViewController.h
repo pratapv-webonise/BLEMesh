@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreBluetooth/CoreBluetooth.h>
-@interface CreateMeshViewController : UIViewController<CBCentralManagerDelegate,CBPeripheralDelegate,CBPeripheralManagerDelegate,UITableViewDataSource,UITableViewDelegate>
+@interface CreateMeshViewController : UIViewController<CBCentralManagerDelegate,UITableViewDataSource,UITableViewDelegate>
 
 //base
 @property(nonatomic,strong) NSMutableDictionary *meshDictionary;

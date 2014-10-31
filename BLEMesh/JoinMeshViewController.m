@@ -46,7 +46,7 @@
     if (peripheral.state == CBPeripheralManagerStatePoweredOn) {
      
         
-        self.transferCharacteristic = [[CBMutableCharacteristic alloc] initWithType:[CBUUID UUIDWithString:TRANSFER_CHARACTERISTIC_UUID] properties:CBCharacteristicPropertyRead|CBCharacteristicPropertyNotify  value:nil permissions:CBAttributePermissionsWriteable];
+        self.transferCharacteristic = [[CBMutableCharacteristic alloc] initWithType:[CBUUID UUIDWithString:TRANSFER_CHARACTERISTIC_UUID] properties:CBCharacteristicPropertyRead|CBCharacteristicPropertyWrite|CBCharacteristicPropertyNotify  value:nil permissions:CBAttributePermissionsWriteable|CBAttributePermissionsReadable];
         
 
         CBMutableService *transferService = [[CBMutableService alloc] initWithType:[CBUUID UUIDWithString:TRANSFER_SERVICE_UUID] primary:YES];
@@ -61,16 +61,15 @@
 - (void)peripheralManager:(CBPeripheralManager *)peripheral central:(CBCentral *)central didSubscribeToCharacteristic:(CBCharacteristic *)characteristic {
     NSLog(@"Connected to master..%@ %@",central,characteristic.value);
     
+    NSLog(@"value peripheral --> %@",characteristic);
+    
     self.masterConnectionLabel.text = @"Connected to master";
     //Now start scanning and finding new two devices
     
     [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(sendInfomation) userInfo:nil repeats:YES];
  
 }
--(void)peripheral:(CBPeripheral *)peripheral didWriteValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error{
-    
-    NSLog(@"Data from central--->%@",characteristic.value);
-}
+
 #pragma mark
 #pragma send data
 -(void)sendInfomation{
@@ -91,24 +90,14 @@
 
 -(void)peripheralManager:(CBPeripheralManager *)peripheral didReceiveWriteRequests:(NSArray *)requests
 {
-     NSLog(@"write request...");
-}
-
-- (void)peripheral:(CBPeripheral *)peripheral didWriteValueForCharacteristic:(CBCharacteristic *)characteristic
-{
-    NSString *s= [[NSString alloc] initWithData:characteristic.value encoding:NSUTF8StringEncoding];
-    NSLog(@"didWriteValue characteristic.value: %@ ", s);
-}
-
--(void)peripheral:(CBPeripheral *)peripheral didUpdateNotificationStateForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error{
+     NSLog(@"write request... %@",[[requests lastObject] class]);
     
-    NSLog(@"Notification recived..%@",characteristic.value);
-}
-- (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error
-{
+    CBATTRequest *request = [requests lastObject];
+    
+    NSString *myString = [[NSString alloc] initWithData:request.value encoding:NSUTF8StringEncoding];
+    NSLog(@"%@",myString);
     
 }
-
 
 
 @end

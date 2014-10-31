@@ -120,19 +120,27 @@
     
     for (CBCharacteristic *characteristic in service.characteristics) {
         if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:TRANSFER_CHARACTERISTIC_UUID]]) {
-            
-            
             [peripheral setNotifyValue:YES forCharacteristic:characteristic];
-            [_charArray addObject:characteristic];
+            
+            //Read value of characterstics
+//            [peripheral readValueForCharacteristic:characteristic];
+
+            //now write
+            
+            NSLog(@"Sending data to peripheral");
+         /*   NSString *levl= @"Level 0";
+            NSData* data = [levl dataUsingEncoding:NSUTF8StringEncoding];
+            [peripheral writeValue:data forCharacteristic:characteristic type:CBCharacteristicWriteWithResponse];*/
+            
         }
     }
-    
+
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
     
     if (error) {
-        NSLog(@"Error");
+        NSLog(@"Error %@",[error debugDescription]);
         return;
     }
     
@@ -143,9 +151,10 @@
         NSLog(@"Recived Data from s2 ---> %@",characteristic.value);
     }
     
-
-    NSLog(@"Sending data to peripheral");
-    [self sendDatatoPeripheral];
+    NSString *levl= @"Level 0";
+    NSData* data = [levl dataUsingEncoding:NSUTF8StringEncoding];
+    [peripheral writeValue:data forCharacteristic:characteristic type:CBCharacteristicWriteWithResponse];
+    
 }
 
 -(void)sendDatatoPeripheral
@@ -167,8 +176,7 @@
                     NSLog(@"char passed");
                     
                     [_discoveredPeripheral_1 writeValue:data forCharacteristic:charac type:CBCharacteristicWriteWithResponse];
-                    
-//                    [_discoveredPeripheral_1 writeValue:data forDescriptor:CBCharacteristic]
+        
                 }
             }
         }
