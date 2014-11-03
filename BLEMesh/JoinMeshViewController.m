@@ -64,8 +64,17 @@
     self.masterConnectionLabel.text = @"Connected to master";
     //Now start scanning and finding new two devices
     
-    [NSTimer scheduledTimerWithTimeInterval:3 target:self selector:@selector(sendInfomation) userInfo:nil repeats:YES];
- 
+    
+    
+    NSDictionary *t   = @{@"name":[UIDevice currentDevice].name,
+                                @"Level":_thisDeviceLevel,
+                                @"right_slave_dict":@"",
+                                @"Left_salve_dict":@""
+                                };
+    
+    
+     NSData *sendData = [NSKeyedArchiver archivedDataWithRootObject:t];
+    [self.peripheralManager updateValue:sendData forCharacteristic:_transferCharacteristic onSubscribedCentrals:nil];
 }
 
 #pragma mark
@@ -89,12 +98,10 @@
 -(void)peripheralManager:(CBPeripheralManager *)peripheral didReceiveWriteRequests:(NSArray *)requests
 {
      NSLog(@"write request... %@",[[requests lastObject] class]);
-    
     CBATTRequest *request = [requests lastObject];
-    
-    NSString *myString = [[NSString alloc] initWithData:request.value encoding:NSUTF8StringEncoding];
-    NSLog(@"%@",myString);
-    
+    _thisDeviceLevel = [[NSString alloc] initWithData:request.value encoding:NSUTF8StringEncoding];
+    _thisDeviceLevel =[NSString stringWithFormat:@"%d",[_thisDeviceLevel intValue] + 1];
+    NSLog(@"%@",_thisDeviceLevel);
 }
 
 
@@ -195,6 +202,45 @@
     
 }
 
+- (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
+    
+    if (error) {
+        NSLog(@"Error %@",[error debugDescription]);
+        return;
+    }
+    
+    if(peripheral == _discoveredPeripheral_1){
+        _slave1Dictionary = (NSDictionary*) [NSKeyedUnarchiver unarchiveObjectWithData:characteristic.value];
+        NSLog(@"Data from slave 1 %@",_slave1Dictionary);
+        
+    }
+    else{
+        _slave2Dictionary = (NSDictionary*) [NSKeyedUnarchiver unarchiveObjectWithData:characteristic.value];
+        NSLog(@"Data from slave 2 %@",_slave2Dictionary);
+    }
+   
+    [self sendStatusToMaster:characteristic.value];
+}
 
+#pragma mark
+#pragma data transferoperaions
 
+-(void)sendStatusToMaster :(NSData *)data{
+    //if this current device have any slave than we will recive data from slave here..
+    //send this data to master
+    
+    NSString *thisDeviceName = [[UIDevice currentDevice] name];
+    
+    _masterPacketDictionary = @{@"name":thisDeviceName,
+                                @"Level":_thisDeviceLevel,
+                                @"right_slave_dict":_slave1Dictionary,
+                                @"Left_salve_dict":_slave2Dictionary
+                                };
+    
+    NSLog(@"MasterPacket %@",_masterPacketDictionary);
+    //covert this data into nsdata
+    NSData *sendData = [NSKeyedArchiver archivedDataWithRootObject:_masterPacketDictionary];
+    
+    [self.peripheralManager updateValue:sendData forCharacteristic:_transferCharacteristic onSubscribedCentrals:nil];
+}
 @end

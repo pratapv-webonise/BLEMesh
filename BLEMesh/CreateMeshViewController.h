@@ -33,4 +33,5 @@
 //saved services
 @property (nonatomic,strong) CBService *storedService;
 
+@property(nonatomic,strong) NSMutableArray *finalDeviceList;
 @end

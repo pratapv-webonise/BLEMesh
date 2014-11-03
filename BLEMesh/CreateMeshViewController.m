@@ -25,6 +25,7 @@
     [self startCentral];
     
     _detectedDevices = [[NSMutableArray alloc]initWithCapacity:2];
+    _finalDeviceList = [[NSMutableArray alloc]init];
     _charArray = [[NSMutableArray alloc]init];
 }
 
@@ -131,9 +132,10 @@
             //now write
             
             NSLog(@"Sending data to peripheral");
-         /*   NSString *levl= @"Level 0";
+            
+            NSString *levl= @"0";
             NSData* data = [levl dataUsingEncoding:NSUTF8StringEncoding];
-            [peripheral writeValue:data forCharacteristic:characteristic type:CBCharacteristicWriteWithResponse];*/
+            [peripheral writeValue:data forCharacteristic:characteristic type:CBCharacteristicWriteWithResponse];
             
         }
     }
@@ -146,15 +148,12 @@
         NSLog(@"Error %@",[error debugDescription]);
         return;
     }
-  
     //Recive Final list of devices...
-    
-    
+    [self getTree:peripheral Data:characteristic.value];
 }
 
 
-- (void)peripheral:(CBPeripheral *)peripheral didWriteValueForCharacteristic:(CBCharacteristic *)characteristic
-{
+- (void)peripheral:(CBPeripheral *)peripheral didWriteValueForCharacteristic:(CBCharacteristic *)characteristic{
     NSString *s= [[NSString alloc] initWithData:characteristic.value encoding:NSUTF8StringEncoding];
     NSLog(@"didWriteValue characteristic.value: %@ ", s);
 }
@@ -163,7 +162,7 @@
 #pragma arguments
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return _detectedDevices.count;
+    return _finalDeviceList.count;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -174,8 +173,7 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     
-    CBPeripheral *p = _detectedDevices[indexPath.row];
-    cell.textLabel.text = p.name;
+    cell.textLabel.text = _finalDeviceList[indexPath.row];
     return cell;
 }
 
@@ -183,8 +181,37 @@
     return 45;
 }
 
+#pragma mark 
+#pragma list of devices
 
+-(void)getTree:(CBPeripheral *)peripheral Data:(NSData *)data{
+    
+    if(peripheral == _discoveredPeripheral_1){
+        NSDictionary *slave1Data = (NSDictionary*) [NSKeyedUnarchiver unarchiveObjectWithData:data];
+        [self getList:slave1Data];
+    }
+    else{
+        NSDictionary *slave2Data = (NSDictionary*) [NSKeyedUnarchiver unarchiveObjectWithData:data];
+        [self getList:slave2Data];
+    }
+}
 
-
+-(void)getList:(NSDictionary *)dictionary{
+    
+    if(dictionary!=nil && ![dictionary isKindOfClass:[NSString class]]){
+        
+        [_finalDeviceList addObject:dictionary[@"name"]];
+        
+        if(dictionary[@"right_slave_dict"]!=nil && ![dictionary isKindOfClass:[NSString class]] ){
+            [self getList:dictionary[@"right_slave_dict"]];
+        }
+        
+        if(dictionary[@"left_slave_dict"]!=nil && ![dictionary isKindOfClass:[NSString class]] ){
+            [self getList:dictionary[@"left_slave_dict"]];
+        }
+        
+        [_tableView reloadData];
+    }
+}
 
 @end

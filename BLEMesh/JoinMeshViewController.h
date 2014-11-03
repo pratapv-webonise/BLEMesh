@@ -29,6 +29,14 @@
 @property (nonatomic,strong) CBPeripheral *discoveredPeripheral_2;
 @property (strong,nonatomic) NSMutableData *data;
 
-
 @property(nonatomic,strong) NSMutableArray *detectedSlaveDevices;
+
+@property(nonatomic,strong) NSString *thisDeviceLevel;
+
+//data transfer operations
+@property(nonatomic,strong) NSDictionary *masterPacketDictionary;
+
+@property(nonatomic,strong) NSDictionary *slave1Dictionary;
+@property(nonatomic,strong) NSDictionary *slave2Dictionary;
+
 @end
