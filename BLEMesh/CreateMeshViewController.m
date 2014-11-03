@@ -26,6 +26,7 @@
     
     _detectedDevices = [[NSMutableArray alloc]initWithCapacity:2];
     _finalDeviceList = [[NSMutableArray alloc]init];
+    _positionArray = [[NSMutableArray alloc]init];
     _charArray = [[NSMutableArray alloc]init];
 }
 
@@ -33,8 +34,6 @@
     [super didReceiveMemoryWarning];
    
 }
-
-
 
 #pragma mark
 #pragma AS A CENTRAL
@@ -94,14 +93,23 @@
 }
 
 -(void)centralManager:(CBCentralManager *)central didConnectPeripheral:(CBPeripheral *)peripheral{
-    [peripheral discoverServices:@[[CBUUID UUIDWithString:TRANSFER_SERVICE_UUID]]];
-    NSLog(@"Discovered services %@",peripheral.services);
+    
+      NSLog(@"Discovered services %@ ",peripheral.services);
+   
+//      [peripheral discoverServices:@[[CBUUID UUIDWithString:TRANSFER_SERVICE_UUID]]];
+   
+    peripheral.delegate = self;
+    
+    if (peripheral.services) {
+        [self peripheral:peripheral didDiscoverServices:nil];
+    } else {
+        [peripheral discoverServices:@[[CBUUID UUIDWithString:TRANSFER_SERVICE_UUID]]];
+    }
     
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverServices:(NSError *)error {
     
-    NSLog(@"SERVICES DISCOVERED.....");
     if (error) {
         [self cleanup];
         return;
@@ -123,20 +131,21 @@
     }
     
     for (CBCharacteristic *characteristic in service.characteristics) {
+        
         if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:TRANSFER_CHARACTERISTIC_UUID]]) {
             [peripheral setNotifyValue:YES forCharacteristic:characteristic];
             
-            //Read value of characterstics
-//            [peripheral readValueForCharacteristic:characteristic];
-
             //now write
-            
-            NSLog(@"Sending data to peripheral");
-            
             NSString *levl= @"0";
             NSData* data = [levl dataUsingEncoding:NSUTF8StringEncoding];
             [peripheral writeValue:data forCharacteristic:characteristic type:CBCharacteristicWriteWithResponse];
             
+        }
+        else  {
+            
+            //Incoming position request
+            [peripheral setNotifyValue:YES forCharacteristic:characteristic];
+            [self positionArrayInitilaisation];
         }
     }
 
@@ -149,7 +158,20 @@
         return;
     }
     //Recive Final list of devices...
-    [self getTree:peripheral Data:characteristic.value];
+    if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:TRANSFER_CHARACTERISTIC_UUID]]){
+        
+        [self getTree:peripheral Data:characteristic.value];
+    
+    }
+    else{
+        //update the position table
+        NSDictionary *positionDictionary = (NSDictionary*) [NSKeyedUnarchiver unarchiveObjectWithData:characteristic.value];
+        
+        NSLog(@"%@",positionDictionary);
+        
+        
+        
+    }
 }
 
 
@@ -214,4 +236,29 @@
     }
 }
 
+-(void)positionArrayInitilaisation{
+    
+    for(int i = 0 ; i < _finalDeviceList.count ; i++ ){
+        
+        NSDictionary *t;
+        
+        if(i==0){
+            
+            t = @{
+                  @"Position":@"1",
+                  @"owner":[UIDevice currentDevice].identifierForVendor
+                 };
+            }
+        else{
+            t = @{
+                  @"Position":@"0",
+                  @"owner":@""
+                };
+        }
+        
+        [_positionArray addObject:t];
+    }
+}
+
 @end
+

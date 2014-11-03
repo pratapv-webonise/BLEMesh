@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreBluetooth/CoreBluetooth.h>
-@interface CreateMeshViewController : UIViewController<CBCentralManagerDelegate,UITableViewDataSource,UITableViewDelegate>
+@interface CreateMeshViewController : UIViewController<CBCentralManagerDelegate,CBPeripheralDelegate,UITableViewDataSource,UITableViewDelegate>
 
 //base
 @property(nonatomic,strong) NSMutableDictionary *meshDictionary;
@@ -32,6 +32,9 @@
 
 //saved services
 @property (nonatomic,strong) CBService *storedService;
-
 @property(nonatomic,strong) NSMutableArray *finalDeviceList;
+
+//Positions
+@property(nonatomic,strong) NSMutableArray *positionArray;
+
 @end

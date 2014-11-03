@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Nd5-5e-0ZN">
     <dependencies>
+        <deployment defaultVersion="1552" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
     </dependencies>
     <scenes>
@@ -16,20 +17,21 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="Gui-WP-1Zq">
-                                <rect key="frame" x="0.0" y="98" width="320" height="361"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <connections>
-                                    <outlet property="dataSource" destination="Lz8-zW-10n" id="uIq-hW-9ak"/>
-                                    <outlet property="delegate" destination="Lz8-zW-10n" id="bM9-Ya-tCh"/>
-                                </connections>
-                            </tableView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="See who is joining your mesh" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="X21-bW-NfV">
                                 <rect key="frame" x="7" y="76" width="200" height="21"/>
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="1" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="Gui-WP-1Zq">
+                                <rect key="frame" x="7" y="96" width="251" height="244"/>
+                                <color key="backgroundColor" red="0.40000000000000002" green="0.74117647060000003" blue="0.37647058820000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="tintColor" red="0.40000000000000002" green="0.74117647060000003" blue="0.37647058820000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="Lz8-zW-10n" id="uIq-hW-9ak"/>
+                                    <outlet property="delegate" destination="Lz8-zW-10n" id="bM9-Ya-tCh"/>
+                                </connections>
+                            </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -41,6 +43,25 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kK9-Gc-UKi" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="761" y="263"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="iUl-GP-HxY">
+            <objects>
+                <viewController id="y9l-xc-Xpv" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="cbq-bT-q7S"/>
+                        <viewControllerLayoutGuide type="bottom" id="46L-tj-pyg"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="OlS-GK-J4I">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="NKz-LS-NhW" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1125" y="263"/>
         </scene>
         <!--Join Mesh View Controller-->
         <scene sceneID="T4S-Y0-h1q">

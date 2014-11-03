@@ -10,6 +10,10 @@
 #define TRANSFER_SERVICE_UUID           @"c6e00bee-5526-4d34-9efd-85b1e4562c4b"
 #define TRANSFER_CHARACTERISTIC_UUID    @"0ae55ad5-4f16-4d41-8487-e7dd7e945f83"
 
+
+#define POSITION_SERVICE_UUID           @"POSITION-SERVICE"
+#define POSITION_CHARACTERISTIC_UUID    @"POSITION-CHARACTERISTIC"
+
 @interface JoinMeshViewController ()
 
 @end
@@ -18,6 +22,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+  
     [self startPeriferal];
    
 }
@@ -30,9 +35,11 @@
 #pragma mark
 #pragma Periferal
 -(void)startPeriferal{
+   
     _peripheralManager = [[CBPeripheralManager alloc] initWithDelegate:self queue:nil];
     _peripheralManager.delegate =self;
-    [_peripheralManager startAdvertising:@{ CBAdvertisementDataServiceUUIDsKey : @[[CBUUID UUIDWithString:TRANSFER_SERVICE_UUID]] }];
+    
+
 }
 
 -(void)peripheralManagerDidUpdateState:(CBPeripheralManager *)peripheral
@@ -45,18 +52,21 @@
     
     if (peripheral.state == CBPeripheralManagerStatePoweredOn) {
      
+        [_peripheralManager startAdvertising:@{ CBAdvertisementDataServiceUUIDsKey : @[[CBUUID UUIDWithString:TRANSFER_SERVICE_UUID]] }];
+        
+        // sending device ids
         
         self.transferCharacteristic = [[CBMutableCharacteristic alloc] initWithType:[CBUUID UUIDWithString:TRANSFER_CHARACTERISTIC_UUID] properties:CBCharacteristicPropertyRead|CBCharacteristicPropertyWrite|CBCharacteristicPropertyNotify  value:nil permissions:CBAttributePermissionsWriteable|CBAttributePermissionsReadable];
         
-
+        
         CBMutableService *transferService = [[CBMutableService alloc] initWithType:[CBUUID UUIDWithString:TRANSFER_SERVICE_UUID] primary:YES];
         
         transferService.characteristics = @[_transferCharacteristic];
         
         [_peripheralManager addService:transferService];
+        
     }
 }
-
 
 - (void)peripheralManager:(CBPeripheralManager *)peripheral central:(CBCentral *)central didSubscribeToCharacteristic:(CBCharacteristic *)characteristic {
     NSLog(@"Connected to master..%@ %@",central,characteristic.value);
@@ -64,10 +74,8 @@
     self.masterConnectionLabel.text = @"Connected to master";
     //Now start scanning and finding new two devices
     
-    
-    
     NSDictionary *t   = @{@"name":[UIDevice currentDevice].name,
-                                @"Level":_thisDeviceLevel,
+                                @"Level":@"",
                                 @"right_slave_dict":@"",
                                 @"Left_salve_dict":@""
                                 };
@@ -166,6 +174,7 @@
 }
 
 -(void)centralManager:(CBCentralManager *)central didConnectPeripheral:(CBPeripheral *)peripheral{
+    
     [peripheral discoverServices:@[[CBUUID UUIDWithString:TRANSFER_SERVICE_UUID]]];
     NSLog(@"Discovered services %@",peripheral.services);
     
@@ -242,5 +251,7 @@
     NSData *sendData = [NSKeyedArchiver archivedDataWithRootObject:_masterPacketDictionary];
     
     [self.peripheralManager updateValue:sendData forCharacteristic:_transferCharacteristic onSubscribedCentrals:nil];
+    
+    
 }
 @end

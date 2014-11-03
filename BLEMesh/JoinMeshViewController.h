@@ -39,4 +39,7 @@
 @property(nonatomic,strong) NSDictionary *slave1Dictionary;
 @property(nonatomic,strong) NSDictionary *slave2Dictionary;
 
+//
+@property (strong,nonatomic) CBMutableCharacteristic *positionCharacteristic;
+
 @end

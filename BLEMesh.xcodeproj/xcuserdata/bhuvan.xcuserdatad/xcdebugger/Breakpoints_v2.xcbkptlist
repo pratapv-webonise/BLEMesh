@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "BLEMesh/JoinMeshViewController.m"
-            timestampString = "436448426.94927"
+            timestampString = "436714258.947492"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "200"
-            endingLineNumber = "200"
+            startingLineNumber = "269"
+            endingLineNumber = "269"
             landmarkName = "@implementation JoinMeshViewController"
             landmarkType = "3">
          </BreakpointContent>
@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "BLEMesh/JoinMeshViewController.m"
-            timestampString = "436448426.94927"
+            timestampString = "436714258.947492"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "92"
-            endingLineNumber = "92"
+            startingLineNumber = "114"
+            endingLineNumber = "114"
             landmarkName = "-peripheralManager:didReceiveWriteRequests:"
             landmarkType = "5">
          </BreakpointContent>
@@ -42,11 +42,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "BLEMesh/JoinMeshViewController.m"
-            timestampString = "436448426.94927"
+            timestampString = "436714258.947492"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "204"
-            endingLineNumber = "204">
+            startingLineNumber = "273"
+            endingLineNumber = "273">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -56,11 +56,27 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "BLEMesh/CreateMeshViewController.m"
-            timestampString = "436448426.94927"
+            timestampString = "436712618.64846"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "171"
-            endingLineNumber = "171"
+            startingLineNumber = "212"
+            endingLineNumber = "212"
+            landmarkName = "-getTree:Data:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BLEMesh/CreateMeshViewController.m"
+            timestampString = "436712168.099352"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "197"
+            endingLineNumber = "197"
             landmarkName = "-tableView:cellForRowAtIndexPath:"
             landmarkType = "5">
          </BreakpointContent>
@@ -72,12 +88,60 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "BLEMesh/CreateMeshViewController.m"
-            timestampString = "436442587.349354"
+            timestampString = "436712168.099352"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "62"
-            endingLineNumber = "62"
-            landmarkName = "-centralManager:didDiscoverPeripheral:advertisementData:RSSI:"
+            startingLineNumber = "155"
+            endingLineNumber = "155"
+            landmarkName = "-peripheral:didUpdateValueForCharacteristic:error:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BLEMesh/CreateMeshViewController.m"
+            timestampString = "436712168.099352"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "100"
+            endingLineNumber = "100"
+            landmarkName = "-centralManager:didConnectPeripheral:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BLEMesh/JoinMeshViewController.m"
+            timestampString = "436714258.947492"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "221"
+            endingLineNumber = "221"
+            landmarkName = "-peripheral:didUpdateValueForCharacteristic:error:"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BLEMesh/JoinMeshViewController.m"
+            timestampString = "436714258.947492"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "206"
+            endingLineNumber = "206"
+            landmarkName = "-peripheral:didDiscoverCharacteristicsForService:error:"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
