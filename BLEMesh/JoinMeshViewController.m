@@ -125,6 +125,76 @@
 }
 
 
+-(void)centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI{
+    
+    
+    NSLog(@"Connecting to %@ - advertisement data %@",peripheral.name,advertisementData);
+    
+    if(peripheral!=_discoveredPeripheral_1 && peripheral!= _discoveredPeripheral_2){
+        NSLog(@"Periferal 1 found..");
+        _discoveredPeripheral_1 = peripheral;
+        [_centralManager connectPeripheral:peripheral options:nil];
+        //1 device
+        
+        [_detectedSlaveDevices addObject:peripheral];
+        [central stopScan];
+    }
+    else if(_discoveredPeripheral_2 == nil && peripheral!= _discoveredPeripheral_1) {
+        NSLog(@"Periferal 2 found..");
+        _discoveredPeripheral_2 = peripheral;
+        [_centralManager connectPeripheral:peripheral options:nil];
+        [_detectedSlaveDevices addObject:peripheral];
+        [central stopScan];
+    }
+}
+
+- (void)centralManager:(CBCentralManager *)central didFailToConnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error {
+    NSLog(@"Failed to connect");
+    [self cleanup];
+}
+
+- (void)cleanup {
+    NSLog(@"Clean up...");
+    //diconnect all devices
+}
+
+-(void)centralManager:(CBCentralManager *)central didConnectPeripheral:(CBPeripheral *)peripheral{
+    [peripheral discoverServices:@[[CBUUID UUIDWithString:TRANSFER_SERVICE_UUID]]];
+    NSLog(@"Discovered services %@",peripheral.services);
+    
+}
+
+- (void)peripheral:(CBPeripheral *)peripheral didDiscoverServices:(NSError *)error {
+    
+    NSLog(@"SERVICES DISCOVERED.....");
+    if (error) {
+        [self cleanup];
+        return;
+    }
+    
+    for (CBService *service in peripheral.services) {
+        [peripheral discoverCharacteristics:@[[CBUUID UUIDWithString:TRANSFER_CHARACTERISTIC_UUID]] forService:service];
+    }
+}
+
+
+- (void)peripheral:(CBPeripheral *)peripheral didDiscoverCharacteristicsForService:(CBService *)service error:(NSError *)error {
+    
+    NSLog(@"Charterstics DICOVERED");
+    
+    if (error) {
+        [self cleanup];
+        return;
+    }
+    
+    for (CBCharacteristic *characteristic in service.characteristics) {
+        if ([characteristic.UUID isEqual:[CBUUID UUIDWithString:TRANSFER_CHARACTERISTIC_UUID]]) {
+            [peripheral setNotifyValue:YES forCharacteristic:characteristic];
+        }
+    }
+    
+}
+
 
 
 @end

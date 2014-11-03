@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <CoreBluetooth/CoreBluetooth.h>
 
-@interface JoinMeshViewController : UIViewController<CBPeripheralManagerDelegate,CBPeripheralDelegate>
+@interface JoinMeshViewController : UIViewController<CBPeripheralManagerDelegate,CBCentralManagerDelegate,CBPeripheralDelegate>
 
 //periferal
 @property (strong,nonatomic) CBPeripheralManager *peripheralManager;
@@ -29,4 +29,6 @@
 @property (nonatomic,strong) CBPeripheral *discoveredPeripheral_2;
 @property (strong,nonatomic) NSMutableData *data;
 
+
+@property(nonatomic,strong) NSMutableArray *detectedSlaveDevices;
 @end
