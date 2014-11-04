@@ -168,9 +168,6 @@
         NSDictionary *positionDictionary = (NSDictionary*) [NSKeyedUnarchiver unarchiveObjectWithData:characteristic.value];
         
         NSLog(@"%@",positionDictionary);
-        
-        
-        
     }
 }
 
@@ -209,12 +206,10 @@
 -(void)getTree:(CBPeripheral *)peripheral Data:(NSData *)data{
     
     if(peripheral == _discoveredPeripheral_1){
-        NSDictionary *slave1Data = (NSDictionary*) [NSKeyedUnarchiver unarchiveObjectWithData:data];
-        [self getList:slave1Data];
+               [self getList:[self dataToDictionary:data]];
     }
     else{
-        NSDictionary *slave2Data = (NSDictionary*) [NSKeyedUnarchiver unarchiveObjectWithData:data];
-        [self getList:slave2Data];
+        [self getList:[self dataToDictionary:data]];
     }
 }
 
@@ -258,6 +253,19 @@
         
         [_positionArray addObject:t];
     }
+}
+
+-(NSData *)dictionaryToData:(NSDictionary*)dict{
+    NSData *data1 = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingPrettyPrinted error:nil];
+    return data1;
+}
+
+
+-(NSDictionary*)dataToDictionary:(NSData*)data{
+    return  [NSJSONSerialization JSONObjectWithData:data
+                                            options:kNilOptions
+                                              error:nil];
+    
 }
 
 @end

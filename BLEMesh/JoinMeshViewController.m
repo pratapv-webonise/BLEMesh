@@ -74,15 +74,20 @@
     self.masterConnectionLabel.text = @"Connected to master";
     //Now start scanning and finding new two devices
     
-    NSDictionary *t   = @{@"name":[UIDevice currentDevice].name,
-                                @"Level":@"",
+     NSString *name = @"";
+     name = [UIDevice currentDevice].name;
+    
+    NSString *level = @"";
+    level = self.thisDeviceLevel;
+    
+    
+    NSDictionary *t   = @{@"name":name,
+                                @"Level":level,
                                 @"right_slave_dict":@"",
                                 @"Left_salve_dict":@""
                                 };
     
-    
-     NSData *sendData = [NSKeyedArchiver archivedDataWithRootObject:t];
-    [self.peripheralManager updateValue:sendData forCharacteristic:_transferCharacteristic onSubscribedCentrals:nil];
+    [self.peripheralManager updateValue:[self dictionaryToData:t] forCharacteristic:_transferCharacteristic onSubscribedCentrals:nil];
 }
 
 #pragma mark
@@ -247,11 +252,22 @@
                                 };
     
     NSLog(@"MasterPacket %@",_masterPacketDictionary);
-    //covert this data into nsdata
-    NSData *sendData = [NSKeyedArchiver archivedDataWithRootObject:_masterPacketDictionary];
-    
-    [self.peripheralManager updateValue:sendData forCharacteristic:_transferCharacteristic onSubscribedCentrals:nil];
-    
+   
+    [self.peripheralManager updateValue:[self dictionaryToData:_masterPacketDictionary] forCharacteristic:_transferCharacteristic onSubscribedCentrals:nil];
     
 }
+
+-(NSData *)dictionaryToData:(NSDictionary*)dict{
+    NSData *data1 = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingPrettyPrinted error:nil];
+    return data1;
+}
+
+
+-(NSDictionary*)dataToDictionary:(NSData*)data{
+    return  [NSJSONSerialization JSONObjectWithData:data
+                                            options:kNilOptions
+                                              error:nil];
+    
+}
+
 @end
