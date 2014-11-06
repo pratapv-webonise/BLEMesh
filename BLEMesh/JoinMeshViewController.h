@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <CoreBluetooth/CoreBluetooth.h>
 
-@interface JoinMeshViewController : UIViewController<CBPeripheralManagerDelegate,CBCentralManagerDelegate,CBPeripheralDelegate>
+@interface JoinMeshViewController : UIViewController<CBPeripheralManagerDelegate,CBCentralManagerDelegate,CBPeripheralDelegate,UIAlertViewDelegate,UITextFieldDelegate>
 
 //periferal
 @property (strong,nonatomic) CBPeripheralManager *peripheralManager;
@@ -39,7 +39,14 @@
 @property(nonatomic,strong) NSDictionary *slave1Dictionary;
 @property(nonatomic,strong) NSDictionary *slave2Dictionary;
 
-//
+//position
 @property (strong,nonatomic) CBMutableCharacteristic *positionCharacteristic;
+
+//
+@property(strong,nonatomic) IBOutlet UIButton *askPositionBtn;
+-(IBAction)askPositionBtnClicked:(id)sender;
+
+//
+@property(nonatomic,strong) NSMutableDictionary *requestStatus;
 
 @end

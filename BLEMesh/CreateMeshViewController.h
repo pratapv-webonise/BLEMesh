@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreBluetooth/CoreBluetooth.h>
-@interface CreateMeshViewController : UIViewController<CBCentralManagerDelegate,CBPeripheralDelegate,UITableViewDataSource,UITableViewDelegate>
+@interface CreateMeshViewController : UIViewController<CBCentralManagerDelegate,CBPeripheralDelegate,UITableViewDataSource,UITableViewDelegate,UIAlertViewDelegate,UITextFieldDelegate>
 
 //base
 @property(nonatomic,strong) NSMutableDictionary *meshDictionary;
@@ -36,5 +36,7 @@
 
 //Positions
 @property(nonatomic,strong) NSMutableArray *positionArray;
+@property(nonatomic,strong) CBCharacteristic *positionCharacteristic;
+
 
 @end

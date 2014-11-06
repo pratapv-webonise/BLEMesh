@@ -24,7 +24,7 @@
     [super viewDidLoad];
   
     [self startPeriferal];
-   
+    _requestStatus = [[NSMutableDictionary alloc]init];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -38,33 +38,28 @@
    
     _peripheralManager = [[CBPeripheralManager alloc] initWithDelegate:self queue:nil];
     _peripheralManager.delegate =self;
-    
-
 }
 
 -(void)peripheralManagerDidUpdateState:(CBPeripheralManager *)peripheral
 {
-    NSLog(@"updating charcterstics.. %d",peripheral.state);
     
     if (peripheral.state != CBPeripheralManagerStatePoweredOn) {
         return;
     }
     
     if (peripheral.state == CBPeripheralManagerStatePoweredOn) {
-     
         [_peripheralManager startAdvertising:@{ CBAdvertisementDataServiceUUIDsKey : @[[CBUUID UUIDWithString:TRANSFER_SERVICE_UUID]] }];
-        
-        // sending device ids
-        
+      
         self.transferCharacteristic = [[CBMutableCharacteristic alloc] initWithType:[CBUUID UUIDWithString:TRANSFER_CHARACTERISTIC_UUID] properties:CBCharacteristicPropertyRead|CBCharacteristicPropertyWrite|CBCharacteristicPropertyNotify  value:nil permissions:CBAttributePermissionsWriteable|CBAttributePermissionsReadable];
-        
-        
         CBMutableService *transferService = [[CBMutableService alloc] initWithType:[CBUUID UUIDWithString:TRANSFER_SERVICE_UUID] primary:YES];
         
-        transferService.characteristics = @[_transferCharacteristic];
+        //position characterstic
+        self.positionCharacteristic = [[CBMutableCharacteristic alloc] initWithType:[CBUUID UUIDWithString:POSITION_CHARACTERISTIC_UUID] properties:CBCharacteristicPropertyRead|CBCharacteristicPropertyWrite|CBCharacteristicPropertyNotify  value:nil permissions:CBAttributePermissionsWriteable|CBAttributePermissionsReadable];
         
+       
+        transferService.characteristics = @[_transferCharacteristic,_positionCharacteristic];
         [_peripheralManager addService:transferService];
-        
+
     }
 }
 
@@ -82,22 +77,18 @@
     
     
     NSDictionary *t   = @{@"name":name,
-                                @"Level":level,
+                                @"Level":_thisDeviceLevel,
                                 @"right_slave_dict":@"",
                                 @"Left_salve_dict":@""
                                 };
     
     [self.peripheralManager updateValue:[self dictionaryToData:t] forCharacteristic:_transferCharacteristic onSubscribedCentrals:nil];
+    
+    [self startSlaveCentral];
 }
 
 #pragma mark
 #pragma send data
--(void)sendInfomation{
-    //data
-    NSString *levl= @"periferal";
-    NSData* data = [levl dataUsingEncoding:NSUTF8StringEncoding];
-    [self.peripheralManager updateValue:data forCharacteristic:self.transferCharacteristic onSubscribedCentrals:nil];
-}
 
 -(NSDictionary *)gatherInfo{
     NSMutableDictionary *dict = [[NSMutableDictionary alloc]init];
@@ -108,12 +99,21 @@
     NSLog(@"read request...");
 }
 
--(void)peripheralManager:(CBPeripheralManager *)peripheral didReceiveWriteRequests:(NSArray *)requests
-{
+-(void)peripheralManager:(CBPeripheralManager *)peripheral didReceiveWriteRequests:(NSArray *)requests{
      NSLog(@"write request... %@",[[requests lastObject] class]);
-    CBATTRequest *request = [requests lastObject];
-    _thisDeviceLevel = [[NSString alloc] initWithData:request.value encoding:NSUTF8StringEncoding];
-    _thisDeviceLevel =[NSString stringWithFormat:@"%d",[_thisDeviceLevel intValue] + 1];
+    
+    CBATTRequest *request = [requests objectAtIndex:0];
+    
+    //check for charcterstic
+     if ([request.characteristic.UUID isEqual:[CBUUID UUIDWithString:TRANSFER_CHARACTERISTIC_UUID]]){
+         _thisDeviceLevel = [[NSString alloc] initWithData:request.value encoding:NSUTF8StringEncoding];
+         _thisDeviceLevel =[NSString stringWithFormat:@"%d",[_thisDeviceLevel intValue] + 1];
+     }
+     else if([request.characteristic.UUID isEqual:[CBUUID UUIDWithString:POSITION_CHARACTERISTIC_UUID]]){
+         //forward to slave
+         [self processPostionRequest:peripheral request:request];
+     }
+    
     NSLog(@"%@",_thisDeviceLevel);
 }
 
@@ -141,15 +141,16 @@
             NSLog(@"Bluetooth service is working...");
             NSLog(@"Scanning for devices.....");
             [_centralManager scanForPeripheralsWithServices:@[[CBUUID UUIDWithString:TRANSFER_SERVICE_UUID]] options:@{ CBCentralManagerScanOptionAllowDuplicatesKey : @YES }];
+            [NSTimer scheduledTimerWithTimeInterval:30 target:self selector:@selector(stopScanningAfter30Sec) userInfo:nil repeats:NO];
         }
 }
 
+-(void)stopScanningAfter30Sec{
+    [_centralManager stopScan];
+}
 
 -(void)centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI{
-    
-    
     NSLog(@"Connecting to %@ - advertisement data %@",peripheral.name,advertisementData);
-    
     if(peripheral!=_discoveredPeripheral_1 && peripheral!= _discoveredPeripheral_2){
         NSLog(@"Periferal 1 found..");
         _discoveredPeripheral_1 = peripheral;
@@ -179,10 +180,8 @@
 }
 
 -(void)centralManager:(CBCentralManager *)central didConnectPeripheral:(CBPeripheral *)peripheral{
-    
     [peripheral discoverServices:@[[CBUUID UUIDWithString:TRANSFER_SERVICE_UUID]]];
     NSLog(@"Discovered services %@",peripheral.services);
-    
 }
 
 - (void)peripheral:(CBPeripheral *)peripheral didDiscoverServices:(NSError *)error {
@@ -258,7 +257,9 @@
 }
 
 -(NSData *)dictionaryToData:(NSDictionary*)dict{
-    NSData *data1 = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingPrettyPrinted error:nil];
+    NSData *data1 = [NSJSONSerialization dataWithJSONObject:dict
+                                                    options:NSJSONWritingPrettyPrinted
+                                                      error:nil];
     return data1;
 }
 
@@ -268,6 +269,64 @@
                                             options:kNilOptions
                                               error:nil];
     
+}
+
+#pragma mark
+#pragma Position alert
+
+-(IBAction)askPositionBtnClicked:(id)sender{
+    
+    UIAlertView *av = [[UIAlertView alloc]initWithTitle:@"Enter the position" message:@"" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    av.alertViewStyle = UIAlertViewStylePlainTextInput;
+    [av textFieldAtIndex:0].delegate = self;
+    [av show];
+}
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    
+    UITextField *textfield =  [alertView textFieldAtIndex: 0];
+    NSLog(@"Requested Position %@",textfield.text);
+    
+    NSDictionary *positionDictionary = @{
+                                         @"Position":textfield.text,
+                                         @"Device_id":[[[UIDevice currentDevice] identifierForVendor]UUIDString]
+                                         };
+
+    if (_peripheralManager.state != CBPeripheralManagerStatePoweredOn) {
+        return;
+    }
+    else {
+        [self.peripheralManager updateValue:[self dictionaryToData:positionDictionary] forCharacteristic:self.positionCharacteristic onSubscribedCentrals:nil];
+    }
+}
+
+#pragma mark
+#pragma position request process
+
+-(void)processPostionRequest:(CBPeripheralManager *)peripheral request:(CBATTRequest *)request{
+    NSDictionary *dictionary = [self dataToDictionary:request.value];
+    
+    /*  @"Status":@"Accepted",
+     @"Position":position,
+     @"Device_id":deviceid
+     */
+    
+    if([dictionary[@"Device_id"] isEqualToString:[[UIDevice currentDevice].identifierForVendor UUIDString]]){
+        NSLog(@"Request is for current device");
+        [self showPositionRequestStatus:dictionary];
+    }else{
+        [self forwardRequest_Peripheral:peripheral data:dictionary];
+    }
+    
+}
+
+-(void)forwardRequest_Peripheral:(CBPeripheralManager *)p data:(NSDictionary*)dictionary{
+    
+}
+
+-(void)showPositionRequestStatus:(NSDictionary *)dictionary{
+    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:dictionary[@"Status"] message:[NSString stringWithFormat:@"Your request for the position %@",dictionary[@"Position"]] delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    [alert show];
 }
 
 @end
